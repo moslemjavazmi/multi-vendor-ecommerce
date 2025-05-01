@@ -5,36 +5,36 @@ module.exports = {
   theme: {
     extend: {
       backdropBlur: {
-        xs: "2px",
+        xs: "2px"
       },
       backgroundImage: {
         "light-mode": "linear-gradient(180deg, #d8e7fb 0%, #fff8fb 100%)",
         "dark-mode":
-          "linear-gradient(144deg, #343c3a 5%, #78807d 70%, #cbd1cf 100%)",
+          "linear-gradient(144deg, #343c3a 5%, #78807d 70%, #cbd1cf 100%)"
       },
       colors: {
         // پالت اصلی
         primary: {
           DEFAULT: "#FF5A1F",
-          dark: "#E04A1A",
+          dark: "#E04A1A"
         },
         secondary: {
           DEFAULT: "#003B5C",
-          dark: "#002A41",
+          dark: "#002A41"
         },
         success: "#00C853",
         error: "#D32F2F",
         dark: {
-          DEFAULT: "#2D3436",
-          text: "#d8e7fb",
+          DEFAULT: "#cbd1cf",
+          text: "#d8e7fb"
         },
         light: {
-          DEFAULT: "#cbd1cf",
-          text: "#343c3a",
+          DEFAULT: "#d8e7fb",
+          text: "#343c3a"
         },
-        highlight: "#FFD700",
-      },
-    },
+        highlight: "#FFD700"
+      }
+    }
   },
-  plugins: [require("tailwindcss-rtl")],
+  plugins: [require("tailwindcss-rtl")]
 };
