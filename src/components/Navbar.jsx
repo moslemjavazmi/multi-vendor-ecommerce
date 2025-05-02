@@ -21,11 +21,11 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-light dark:bg-dark-mode py-4 px-6 shadow-lg transition-colors duration-300">
-      <div className="container mx-auto flex justify-between items-center">
-        <h1 className="text-dark dark:text-light text-2xl font-bold">
+    <nav className="bg-light-mode nav dark:bg-dark-mode dark:navDark py-4 px-6  transition-colors duration-300  ">
+      <div className="container mx-auto flex justify-between items-center ">
+        <h2 className="text-dark dark:text-light text-2xl font-bold">
           فروشگاه آنلاین
-        </h1>
+        </h2>
 
         <div className="flex items-center gap-4">
           {/* دکمه تغییر تم */}

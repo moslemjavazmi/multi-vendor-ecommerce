@@ -15,17 +15,24 @@ module.exports = {
       colors: {
         // پالت اصلی
         primary: {
-          DEFAULT: "#FF5A1F",
-          dark: "#E04A1A"
+          DEFAULT: "#273c75",
+          dark: "#192a56"
+        },
+        warrning: {
+          DEFAULT: "#fbc531",
+          dark: "#e1b12c"
         },
         secondary: {
-          DEFAULT: "#003B5C",
-          dark: "#002A41"
+          DEFAULT: "#d1d8e0",
+          dark: "#a5b1c2"
         },
-        success: "#00C853",
-        error: "#D32F2F",
+        success: {
+          DEFAULT: "#05c46b",
+          dark: "#218c74"
+        },
+        error: "#c23616",
         dark: {
-          DEFAULT: "#cbd1cf",
+          DEFAULT: "#343c3a",
           text: "#d8e7fb"
         },
         light: {

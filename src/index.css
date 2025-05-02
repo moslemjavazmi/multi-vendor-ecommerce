@@ -7,3 +7,24 @@ body {
   text-align: right;
 
 }
+.nav{
+  box-shadow: inset 6px 6px 7px #dadada, inset -6px -6px 7px #ffffff;
+}
+.navDark{
+  box-shadow: inset 6px 6px 7px #000000, inset -6px -6px 7px #151414;
+}
+.loginBtn{
+  box-shadow: inset -9px 9px 12px #04b158, inset -9px -9px 12px #06512e, inset 9px 9px 12px #02753f, inset -9px -9px 12px #0d9857
+
+}
+.loginBtn:hover{
+  box-shadow: 9px 9px 12px #b2b2b3, -9px -9px 12px #ffffff;
+
+}
+
+.loginFrm{
+  box-shadow: inset 6px 6px 7px #dadada, inset -6px -6px 7px #ffffff;
+}
+.loginFrm:hover{
+  box-shadow: inset 20px 20px 7px #fefefe, inset -20px -20px 7px #ffffff;
+}
