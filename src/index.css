@@ -1,30 +1,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+:root {
+  --navShadow: inset 6px 6px 7px #dadada, inset -6px -6px 7px #ffffff;
+  --boxShadow: inset 6px 6px 7px #dadada, inset -6px -6px 7px #ffffff;
+  --boxshadowhover: inset 20px 20px 7px #fefefe, inset -20px -20px 7px #ffffff;
+}
+.dark {
+  --navShadow: inset 6px 6px 7px #1e272e, inset 60px 60px 70px #2d3436;
+  --boxShadow: inset 6px 6px 7px #1e272e, inset -6px -6px 70px #2d3436;
+  --boxshadowhover: inset 20px 20px 7px #1e272e, inset -20px -20px 70px #1e272e,
+    inset 20px -20px 70px #1e272e, inset -20px 20px 70px #1e272e;
+}
 body {
   direction: rtl;
   text-align: right;
-
 }
-.nav{
-  box-shadow: inset 6px 6px 7px #dadada, inset -6px -6px 7px #ffffff;
+.nav {
+  box-shadow: var(--navShadow);
 }
-.navDark{
+/* .navDark {
   box-shadow: inset 6px 6px 7px #000000, inset -6px -6px 7px #151414;
+} */
+.loginBtn {
+  box-shadow: inset -9px 9px 12px #04b158, inset -9px -9px 12px #06512e,
+    inset 9px 9px 12px #02753f, inset -9px -9px 12px #0d9857;
 }
-.loginBtn{
-  box-shadow: inset -9px 9px 12px #04b158, inset -9px -9px 12px #06512e, inset 9px 9px 12px #02753f, inset -9px -9px 12px #0d9857
-
-}
-.loginBtn:hover{
+.loginBtn:hover {
   box-shadow: 9px 9px 12px #b2b2b3, -9px -9px 12px #ffffff;
-
 }
 
-.loginFrm{
-  box-shadow: inset 6px 6px 7px #dadada, inset -6px -6px 7px #ffffff;
+.loginFrm {
+  box-shadow: var(--boxShadow);
 }
-.loginFrm:hover{
-  box-shadow: inset 20px 20px 7px #fefefe, inset -20px -20px 7px #ffffff;
+.loginFrm:hover {
+  box-shadow: var(--boxshadowhover);
 }
