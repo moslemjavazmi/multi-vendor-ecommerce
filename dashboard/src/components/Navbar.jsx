@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { IoMoonSharp } from "react-icons/io5";
 import { LuSun } from "react-icons/lu";
 
@@ -7,25 +7,25 @@ const Navbar = () => {
 
   // بارگذاری اولیه حالت از localStorage
   useEffect(() => {
-    const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+    const savedDarkMode = localStorage.getItem("darkMode") === "true";
     setDarkMode(savedDarkMode);
-    document.documentElement.classList.toggle('dark', savedDarkMode);
+    document.documentElement.classList.toggle("dark", savedDarkMode);
   }, []);
 
   // توگل تم تاریک
   const toggleDarkMode = () => {
     const newMode = !darkMode;
     setDarkMode(newMode);
-    localStorage.setItem('darkMode', newMode);
-    document.documentElement.classList.toggle('dark', newMode);
+    localStorage.setItem("darkMode", newMode);
+    document.documentElement.classList.toggle("dark", newMode);
   };
 
   return (
-    <nav className="bg-light dark:bg-[#78807d ] py-4 px-6 shadow-lg transition-colors duration-300">
-      <div className="container mx-auto flex justify-between items-center">
-        <h1 className="text-dark dark:text-light text-2xl font-bold">
+    <nav className="bg-light-mode  dark:bg-dark-mode  py-4 px-6  transition-colors duration-300 nav">
+      <div className="container mx-auto flex justify-between items-center ">
+        <h2 className="text-dark dark:text-light text-2xl font-bold">
           فروشگاه آنلاین
-        </h1>
+        </h2>
 
         <div className="flex items-center gap-4">
           {/* دکمه تغییر تم */}
