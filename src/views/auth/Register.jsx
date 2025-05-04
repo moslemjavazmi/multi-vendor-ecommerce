@@ -1,36 +1,55 @@
 //src/views/auth/Register.jsx
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { AiOutlineGooglePlus } from 'react-icons/ai'
 import { FaGithub } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { CiFacebook } from "react-icons/ci";
 function Register() {
+  const [state, setState] = useState({
+    name: '',
+    email: '',
+    password:''
+  })
+  const inputHandle = (e) => {
+    setState({
+      ...state,
+      [e.target.name]:e.target.value
+    })
+  }
+  const submit = (e) => {
+    e.preventDefault();
+    console.log(state)
+  }
   return (
     <div className="bg-light-mode dark:bg-dark-mode text-light-text dark:text-light min-h-screen  flex  items-center justify-center transition-colors duration-300 ">
       <div className="loginFrm dark:bg-dark-mode dark:text-dark-text backdrop-blur-sm p-16 rounded-2xl shadow-2xl w-96 transition-all">
         <form
-          action=""
+          onSubmit={submit}
           className="text-right transition-colors duration-3000 "
         >
           <div className="flex flex-col w-full gap-1 mb-3">
-            <label htmlFor="email">نام و نام خانوادگی </label>
+            <label htmlFor="name">نام و نام خانوادگی </label>
             <input
               className="px-3 py-2 outline-none border rounded-md "
-              type="email"
-              name="email"
+              type="name"
+              name="name"
               id="email"
               placeholder="نام"
+              value={state.name}
+              onChange={inputHandle}
             />
           </div>
           <div className="flex flex-col w-full gap-1 mb-3">
             <label htmlFor="email">ایمیل </label>
             <input
               className="px-3 py-2 outline-none border rounded-md "
-              type="email"
+              type="text"
               name="email"
               id="email"
               placeholder="ایمیل"
+              value={state.email}
+              onChange={inputHandle}
             />
           </div>
 
@@ -42,6 +61,8 @@ function Register() {
               name="password"
               id="password"
               placeholder="رمز عبور"
+              value={state.password}
+              onChange={inputHandle}
             />
           </div>
                     <div className="flex flex-row w-full gap-1 mb-3 text-xs/10">
