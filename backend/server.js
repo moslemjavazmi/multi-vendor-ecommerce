@@ -1,4 +1,5 @@
 const express = require("express");
+const { connectDB } = require("./utiles/db");
 const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -16,8 +17,8 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use("/api", require("./routes/authRoutes"));
 app.get("/", (req, res) => res.send("Hello World!"));
-
 const port = process.env.PORT || 5000;
+connectDB();
 
 app.listen(port, () => console.log(`server started at ${port}!`));
 
