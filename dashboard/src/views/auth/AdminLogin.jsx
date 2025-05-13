@@ -1,8 +1,11 @@
-import React,{useState} from "react";
-import { useDispatch } from 'react-redux'
+import React,{useEffect, useState} from "react";
+import { useDispatch, useSelector } from 'react-redux'
+import { PropagateLoader } from 'react-spinners'
+import toast from 'react-hot-toast'
 import {admin_login} from '../../store/Reducers/authReducer'
 const AdminLogin = () => {
   const dispatch = useDispatch()
+  const {loader, errorMessage} = useSelector(state => state.auth)
     const [state, setState] = useState({
       email: '',
       password:''
@@ -17,7 +20,23 @@ const AdminLogin = () => {
       e.preventDefault();
       // console.log(state)
       dispatch(admin_login(state))
-    }
+  }
+  const overrideStyle = {
+    display: "flex",
+    margin: "0 auto",
+    height: '24px',
+    justifyContent: "center",
+    alignItems: "center",
+  };
+
+
+  useEffect(() => {
+  if(errorMessage){
+    toast.error(errorMessage)
+    
+  }
+},[errorMessage])
+
   return (
       <div className="bg-light-mode dark:bg-dark-mode text-light-text dark:text-light min-h-screen  flex  items-center justify-center transition-colors duration-300 ">
       <div className="loginFrm dark:bg-dark-mode dark:text-dark-text backdrop-blur-sm p-8 rounded-2xl shadow-2xl w-96 transition-all">
@@ -59,10 +78,11 @@ const AdminLogin = () => {
           </div>
 
           <button
+            disabled={loader ? true : false}
             type="submit"
             className="loginBtn bg-green-900 text-light p-2 rounded-md block w-full"
           >
-            ورود
+            {loader ? <PropagateLoader color="#fff" cssOverride={overrideStyle}  /> : 'ورود'}
           </button>
 
         </form>
