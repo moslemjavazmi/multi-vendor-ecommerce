@@ -1,7 +1,7 @@
 const adminModel = require("../models/adminModel");
 const bcrypt = require("bcrypt");
 const { responseReturn } = require("../utiles/response");
-const { createToken } = require("../utiles/createToken");
+const { createToken } = require("../utiles/tokenCreate");
 class authControllers {
   admin_login = async (req, res) => {
     const { email, password } = req.body;
@@ -14,16 +14,17 @@ class authControllers {
         if (match) {
           const token = await createToken({
             id: admin.id,
-            role: admin.role,
+            role: admin.role
           });
           res.cookie("accessToken", token, {
-            expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+            expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
           });
           responseReturn(res, 200, { token, message: "ورود موقیت آمیز بود" });
         } else {
+          responseReturn(res, 404, { error: "رمز عبور اشتباه است" });
         }
       } else {
-        responseReturn(res, 400, { error: "ایمیل یافت نشد" });
+        responseReturn(res, 404, { error: "ایمیل یافت نشد" });
       }
       // console.log(admin);
     } catch (error) {
