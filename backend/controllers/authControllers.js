@@ -2,6 +2,7 @@ const adminModel = require("../models/adminModel");
 const bcrypt = require("bcrypt");
 const { responseReturn } = require("../utiles/response");
 const { createToken } = require("../utiles/tokenCreate");
+const { userInfo } = require("os");
 class authControllers {
   admin_login = async (req, res) => {
     const { email, password } = req.body;
@@ -29,6 +30,20 @@ class authControllers {
       // console.log(admin);
     } catch (error) {
       responseReturn(res, 500, { error: error.messages });
+    }
+  };
+  getUser = async (req, res) => {
+    const { id, role } = req;
+    try {
+      if (role === "admin") {
+        const user = await adminModel.findById(id);
+        responseReturn(res, 200, { userInfo: user });
+      } else {
+        // responseReturn(res, 404, { error: "شما به این صفحه دسترسی ندارید" });
+        console.log("seller info");
+      }
+    } catch (error) {
+      console.log(error.message);
     }
   };
 }
