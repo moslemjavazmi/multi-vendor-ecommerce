@@ -6,15 +6,15 @@ const AdminLogin = lazy(() => import("../../views/auth/AdminLogin"));
 const publicRoutes = [
   {
     path: "/login",
-    element: <Login />,
+    element: <Login />
   },
   {
     path: "/register",
-    element: <Register />,
+    element: <Register />
   },
   {
     path: "/admin/login",
-    element: <AdminLogin />,
-  },
+    element: <AdminLogin />
+  }
 ];
 export default publicRoutes;
