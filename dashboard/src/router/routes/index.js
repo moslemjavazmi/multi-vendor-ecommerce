@@ -1,4 +1,4 @@
-import privateRoutes from "./privateRoutes";
+import { privateRoutes } from "./privateRoutes";
 import MainLayout from "../../layout/MainLayout";
 
 export const getRoutes = () => {
