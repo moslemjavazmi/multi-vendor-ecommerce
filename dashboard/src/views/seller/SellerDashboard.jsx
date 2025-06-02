@@ -30,15 +30,15 @@ const SellerDashboard = () => {
   const state = {
     series: [
       {
-        name: "Orders",
+        name: "سفارشات",
         data: [34, 65, 34, 65, 34, 34, 34, 56, 23, 67, 23, 45]
       },
       {
-        name: "Revenue",
+        name: "درآمد",
         data: [34, 32, 45, 32, 34, 34, 43, 56, 65, 67, 45, 78]
       },
       {
-        name: "Sellers",
+        name: "فروش",
         data: [78, 32, 34, 54, 65, 34, 54, 21, 54, 43, 45, 43]
       }
     ],

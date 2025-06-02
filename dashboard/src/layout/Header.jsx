@@ -35,7 +35,7 @@ const Header = ({ showSidebar, setShowSidebar }) => {
                   {userInfo.role}
                 </span>
               </div>
-              {userInfo.role === "admin" ? (
+              {userInfo.role === "seller" ? (
                 <img
                   className="w-[45px] h-[45px] rounded-full overflow-hidden"
                   src={userInfo.image ? userInfo.image : adminImage}
