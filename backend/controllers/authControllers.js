@@ -15,10 +15,10 @@ class authControllers {
         if (match) {
           const token = await createToken({
             id: admin.id,
-            role: admin.role,
+            role: admin.role
           });
           res.cookie("accessToken", token, {
-            expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+            expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
           });
           responseReturn(res, 200, { token, message: "ورود موقیت آمیز بود" });
         } else {
@@ -31,6 +31,9 @@ class authControllers {
     } catch (error) {
       responseReturn(res, 500, { error: error.messages });
     }
+  };
+  seller_register = async (req, res) => {
+    console.log(req.body);
   };
   getUser = async (req, res) => {
     const { id, role } = req;
