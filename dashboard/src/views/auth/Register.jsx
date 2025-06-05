@@ -26,7 +26,7 @@ function Register() {
   };
   const submit = (e) => {
     e.preventDefault();
-    console.log(state);
+    console.log("dispatch state", dispatch(seller_register(state)));
   };
   return (
     <div className="bg-light-mode dark:bg-dark-mode text-light-text dark:text-light min-h-screen  flex  items-center justify-center transition-colors duration-300 ">

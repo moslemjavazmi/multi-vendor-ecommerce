@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const { responseReturn } = require("../utiles/response");
 const { createToken } = require("../utiles/tokenCreate");
 const { userInfo } = require("os");
+const { get } = require("http");
 class authControllers {
   admin_login = async (req, res) => {
     const { email, password } = req.body;
@@ -33,7 +34,22 @@ class authControllers {
     }
   };
   seller_register = async (req, res) => {
-    console.log(req.body);
+    const { email, password, name } = req.body;
+    try {
+      const getUser = await sellerModel.findById(email);
+      if (getUser) {
+        responseReturn(res, 404, { error: "ایمیل قبلا ثبت شده است" });
+      } else {
+        const seller = await sellerModel.create({
+          email,
+          password: await bcrypt.hash(password, 10),
+          name,
+          method: "menualy",
+          shopInfo: {}
+        });
+        
+      }
+    } catch (error) {}
   };
   getUser = async (req, res) => {
     const { id, role } = req;

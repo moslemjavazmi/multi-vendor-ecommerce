@@ -19,12 +19,12 @@ export const seller_register = createAsyncThunk(
   "auth/seller_register",
   async (info, { rejectWithValue, fulfillWithValue }) => {
     try {
-      console.log(info);
+      console.log("info", info);
       const { data } = await api.post("seller-register", info, {
         withCredentials: true
       });
       // localStorage.setItem("accessToken", data.token);
-      console.log(data);
+      console.log("data", data);
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);

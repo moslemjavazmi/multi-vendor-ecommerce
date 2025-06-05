@@ -3,25 +3,25 @@ const { Schema, model } = require("mongoose");
 const adminSchema = new Schema({
   name: {
     type: String,
-    required: true,
+    required: true
   },
   email: {
     type: String,
-    required: true,
+    required: true
   },
   password: {
     type: String,
     required: true,
-    select: false,
+    select: false
   },
   image: {
     type: String,
-    required: true,
+    required: true
   },
   role: {
     type: String,
-    default: "admin",
-  },
+    default: "admin"
+  }
 });
 
 module.exports = model("Admins", adminSchema);
