@@ -40,4 +40,4 @@ const sellerSchema = new Schema({
   }
 });
 
-module.exports = model("sellers", adminSchema);
+module.exports = model("sellers", sellerSchema);

@@ -1,4 +1,6 @@
 const adminModel = require("../models/adminModel");
+const sellerModel = require("../models/sellerModel");
+
 const bcrypt = require("bcrypt");
 const { responseReturn } = require("../utiles/response");
 const { createToken } = require("../utiles/tokenCreate");
@@ -36,7 +38,8 @@ class authControllers {
   seller_register = async (req, res) => {
     const { email, password, name } = req.body;
     try {
-      const getUser = await sellerModel.findById(email);
+      const getUser = await sellerModel.findOne(email);
+      console.log("getUser", getUser);
       if (getUser) {
         responseReturn(res, 404, { error: "ایمیل قبلا ثبت شده است" });
       } else {
@@ -47,7 +50,17 @@ class authControllers {
           method: "menualy",
           shopInfo: {}
         });
-        
+        const token = await createToken({
+          id: seller.id,
+          role: seller.role
+        });
+        res.cookie("accessToken", token, {
+          expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+        });
+        responseReturn(res, 200, {
+          token,
+          message: "ورود موقیت آمیز بود"
+        });
       }
     } catch (error) {}
   };

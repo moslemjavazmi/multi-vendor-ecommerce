@@ -26,7 +26,7 @@ function Register() {
   };
   const submit = (e) => {
     e.preventDefault();
-    console.log("dispatch state", dispatch(seller_register(state)));
+    dispatch(seller_register(state));
   };
   return (
     <div className="bg-light-mode dark:bg-dark-mode text-light-text dark:text-light min-h-screen  flex  items-center justify-center transition-colors duration-300 ">
@@ -41,7 +41,7 @@ function Register() {
               className="px-3 py-2 outline-none border rounded-md "
               type="name"
               name="name"
-              id="email"
+              id="name"
               placeholder="نام"
               value={state.name}
               onChange={inputHandle}
