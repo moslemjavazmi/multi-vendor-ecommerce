@@ -17,6 +17,22 @@ export const admin_login = createAsyncThunk(
   }
 );
 
+export const seller_login = createAsyncThunk(
+  "auth/seller_login",
+  async (info, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post("/seller-login", info, {
+        withCredentials: true
+      });
+      console.log(data);
+      // localStorage.setItem("accessToken", data.token);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const seller_register = createAsyncThunk(
   "auth/seller_register",
   async (info, { rejectWithValue, fulfillWithValue }) => {
@@ -34,6 +50,20 @@ export const seller_register = createAsyncThunk(
     }
   }
 );
+export const get_user_info = createAsyncThunk(
+  "auth/get_user_info",
+  async (_, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get("/get-info", {
+        withCredentials: true
+      });
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 export const authReducer = createSlice({
   name: "auth",
@@ -41,7 +71,9 @@ export const authReducer = createSlice({
     successMessage: "",
     errorMessage: "",
     loader: false,
-    userInfo: ""
+    userInfo: "",
+    role: "",
+    token: ""
   },
   reducers: {
     messageClear: (state, _) => {
@@ -64,7 +96,23 @@ export const authReducer = createSlice({
       .addCase(admin_login.rejected, (state, action) => {
         state.loader = false;
         state.userInfo = action.payload;
-        state.errorMessage = "مشکلی پیش آمده است";
+        state.errorMessage = "ایمیل یا رمز عبور نادرست است";
+      });
+    builder
+      .addCase(seller_login.pending, (state, _) => {
+        state.loader = true;
+        state.errorMessage = "";
+        state.successMessage = "";
+      })
+      .addCase(seller_login.fulfilled, (state, action) => {
+        state.loader = false;
+        state.userInfo = action.payload;
+        state.successMessage = "ورود با موفقیت انجام شد";
+      })
+      .addCase(seller_login.rejected, (state, action) => {
+        state.loader = false;
+        state.userInfo = action.payload;
+        state.errorMessage = "ایمیل یا رمز عبور نادرست است";
       });
 
     builder
@@ -82,6 +130,21 @@ export const authReducer = createSlice({
         state.loader = false;
         state.userInfo = action.payload;
         state.successMessage = "ثبت نام با موفقیت انجام شد";
+      });
+
+    builder
+      .addCase(get_user_info.pending, (state, _) => {
+        state.loader = true;
+        state.errorMessage = "";
+        state.successMessage = "";
+      })
+      .addCase(get_user_info.fulfilled, (state, action) => {
+        state.loader = false;
+        state.userInfo = action.payload;
+      })
+      .addCase(get_user_info.rejected, (state, action) => {
+        state.loader = false;
+        state.userInfo = action.payload;
       });
   }
 });

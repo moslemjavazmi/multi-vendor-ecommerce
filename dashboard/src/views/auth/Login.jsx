@@ -1,25 +1,45 @@
 //src/views/auth/Register.jsx
-import React,{useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { AiOutlineGooglePlus } from 'react-icons/ai'
+import { AiOutlineGooglePlus } from "react-icons/ai";
 import { FaGithub } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { CiFacebook } from "react-icons/ci";
+import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import { seller_login, messageClear } from "../../store/Reducers/authReducer";
+import { PropagateLoader } from "react-spinners";
+import { overrideStyle } from "../../utils/utils";
+
 const Login = () => {
-    const [state, setState] = useState({
-      email: '',
-      password:''
-    })
-    const inputHandle = (e) => {
-      setState({
-        ...state,
-        [e.target.name]:e.target.value
-      })
+  const dispatch = useDispatch();
+  const { loader, errorMessage, successMessage } = useSelector(
+    (state) => state.auth
+  );
+  const [state, setState] = useState({
+    email: "",
+    password: ""
+  });
+  const inputHandle = (e) => {
+    setState({
+      ...state,
+      [e.target.name]: e.target.value
+    });
+  };
+  const submit = (e) => {
+    e.preventDefault();
+    dispatch(seller_login(state));
+  };
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(messageClear());
     }
-    const submit = (e) => {
-      e.preventDefault();
-      console.log(state)
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(messageClear());
     }
+  }, [successMessage, errorMessage]);
   return (
     <div className="bg-light-mode dark:bg-dark-mode text-light-text dark:text-light min-h-screen  flex  items-center justify-center transition-colors duration-300 ">
       <div className="loginFrm dark:bg-dark-mode dark:text-dark-text backdrop-blur-sm p-16 rounded-2xl shadow-2xl w-96 transition-all">
@@ -27,14 +47,13 @@ const Login = () => {
           <div className="w-[180px] h-[50px]">
             <img src="http://localhost:3000/images/logo.png" alt="" />
           </div>
-       </div>
+        </div>
         <h1 className="flex justify-center text-4xl mb-5 text-primary">ورود</h1>
-       
+
         <form
           onSubmit={submit}
           className="text-right transition-colors duration-3000 "
         >
-
           <div className="flex flex-col w-full gap-1 mb-3">
             <label htmlFor="email">ایمیل </label>
             <input
@@ -43,7 +62,7 @@ const Login = () => {
               name="email"
               id="email"
               placeholder="ایمیل"
-                            value={state.email}
+              value={state.email}
               onChange={inputHandle}
             />
           </div>
@@ -56,7 +75,7 @@ const Login = () => {
               name="password"
               id="password"
               placeholder="رمز عبور"
-                            value={state.password}
+              value={state.password}
               onChange={inputHandle}
             />
           </div>
@@ -65,39 +84,45 @@ const Login = () => {
             type="submit"
             className="loginBtn bg-green-900 text-light p-2 rounded-md block w-full"
           >
-            ورود
+            {loader ? (
+              <PropagateLoader color="#fff" cssOverride={overrideStyle} />
+            ) : (
+              "ورود"
+            )}
           </button>
           <div className="flex justify-center p-1">
-            <Link to='/Register' >
-              ثبت نام؟
-            </Link>
+            <Link to="/Register">ثبت نام؟</Link>
           </div>
-          <div className="w-full flex justify-center items-center mb-3"><div className="w-[45%] bg-slate-700 h-[1px]">
-          </div>
-          <div className="w-[10%] flex justify-center  items-center">
-
-          <span className="pb-1">یا</span>
-          </div>
-            
-            <div className="w-[45%] bg-slate-700 h-[1px]"></div></div>
-            <div className="flex justify-center items-center gap-3">
-                <div className="flex w-[35px] h-[35px] rounded-md bg-orange-700 shadow-lg hover:shadow-orange-700/50 hover:text-secondary justify-center cursor-pointer items-center overflow-hidden">
-
-              <span><AiOutlineGooglePlus className="text-2xl"/></span>
+          <div className="w-full flex justify-center items-center mb-3">
+            <div className="w-[45%] bg-slate-700 h-[1px]"></div>
+            <div className="w-[10%] flex justify-center  items-center">
+              <span className="pb-1">یا</span>
             </div>
-              <div className="flex w-[35px] h-[35px] rounded-md bg-purple-700 shadow-lg hover:shadow-purple-700/50  hover:text-secondary  justify-center cursor-pointer items-center overflow-hidden">
 
-              <span><FaGithub  className="text-xl"/></span>
-              </div>
-              <div className="flex w-[35px] h-[35px] rounded-md bg-cyan-700 shadow-lg hover:shadow-cyan-700/50 hover:text-secondary  justify-center cursor-pointer items-center overflow-hidden">
-
-              <span><FaXTwitter/></span>
-              </div>
-              <div className="flex w-[35px] h-[35px] rounded-md bg-indigo-700 shadow-lg hover:shadow-indigo-700/50 hover:text-secondary justify-center cursor-pointer items-center overflow-hidden">
-
-              <span><CiFacebook className="text-2xl"/></span>
-              </div>
+            <div className="w-[45%] bg-slate-700 h-[1px]"></div>
+          </div>
+          <div className="flex justify-center items-center gap-3">
+            <div className="flex w-[35px] h-[35px] rounded-md bg-orange-700 shadow-lg hover:shadow-orange-700/50 hover:text-secondary justify-center cursor-pointer items-center overflow-hidden">
+              <span>
+                <AiOutlineGooglePlus className="text-2xl" />
+              </span>
             </div>
+            <div className="flex w-[35px] h-[35px] rounded-md bg-purple-700 shadow-lg hover:shadow-purple-700/50  hover:text-secondary  justify-center cursor-pointer items-center overflow-hidden">
+              <span>
+                <FaGithub className="text-xl" />
+              </span>
+            </div>
+            <div className="flex w-[35px] h-[35px] rounded-md bg-cyan-700 shadow-lg hover:shadow-cyan-700/50 hover:text-secondary  justify-center cursor-pointer items-center overflow-hidden">
+              <span>
+                <FaXTwitter />
+              </span>
+            </div>
+            <div className="flex w-[35px] h-[35px] rounded-md bg-indigo-700 shadow-lg hover:shadow-indigo-700/50 hover:text-secondary justify-center cursor-pointer items-center overflow-hidden">
+              <span>
+                <CiFacebook className="text-2xl" />
+              </span>
+            </div>
+          </div>
         </form>
       </div>
     </div>

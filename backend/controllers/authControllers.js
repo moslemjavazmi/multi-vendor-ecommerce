@@ -35,6 +35,34 @@ class authControllers {
       responseReturn(res, 500, { error: error.messages });
     }
   };
+  seller_login = async (req, res) => {
+    const { email, password } = req.body;
+    try {
+      const seller = await sellerModel
+        .findOne({ email: email })
+        .select("+password");
+      if (seller) {
+        const match = await bcrypt.compare(password, seller.password);
+        if (match) {
+          const token = await createToken({
+            id: seller.id,
+            role: seller.role
+          });
+          res.cookie("accessToken", token, {
+            expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+          });
+          responseReturn(res, 200, { token, message: "ورود موقیت آمیز بود" });
+        } else {
+          responseReturn(res, 404, { error: "رمز عبور اشتباه است" });
+        }
+      } else {
+        responseReturn(res, 404, { error: "ایمیل یافت نشد" });
+      }
+      // console.log(seller);
+    } catch (error) {
+      responseReturn(res, 500, { error: error.messages });
+    }
+  };
   seller_register = async (req, res) => {
     const { email, password, name } = req.body;
     try {
