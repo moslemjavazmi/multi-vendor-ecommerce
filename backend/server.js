@@ -4,6 +4,7 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+
 require("dotenv").config();
 
 app.use(
@@ -16,6 +17,7 @@ app.use(
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use("/api", require("./routes/authRoutes"));
+
 app.get("/", (req, res) => res.send("Hello World!"));
 const port = process.env.PORT || 5000;
 connectDB();

@@ -1,11 +1,11 @@
+//backend/controllers/authControllers.js
 const adminModel = require("../models/adminModel");
 const sellerModel = require("../models/sellerModel");
 
 const bcrypt = require("bcrypt");
 const { responseReturn } = require("../utiles/response");
 const { createToken } = require("../utiles/tokenCreate");
-const { userInfo } = require("os");
-const { get } = require("http");
+const sellerCustomerModel = require("../models/chat/sellerCustomerModel");
 class authControllers {
   admin_login = async (req, res) => {
     const { email, password } = req.body;
@@ -38,18 +38,19 @@ class authControllers {
   seller_register = async (req, res) => {
     const { email, password, name } = req.body;
     try {
-      const getUser = await sellerModel.findOne(email);
-      console.log("getUser", getUser);
+      const getUser = await sellerModel.findOne({ email });
       if (getUser) {
         responseReturn(res, 404, { error: "ایمیل قبلا ثبت شده است" });
       } else {
         const seller = await sellerModel.create({
+          name,
           email,
           password: await bcrypt.hash(password, 10),
-          name,
           method: "menualy",
           shopInfo: {}
         });
+
+        await sellerCustomerModel.create({ myId: seller.id });
         const token = await createToken({
           id: seller.id,
           role: seller.role
@@ -57,13 +58,17 @@ class authControllers {
         res.cookie("accessToken", token, {
           expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
         });
-        responseReturn(res, 200, {
+        responseReturn(res, 201, {
           token,
-          message: "ورود موقیت آمیز بود"
+          message: "ثبت نام موفقیت آمیز بود"
         });
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log("error", error);
+      responseReturn(res, 500, { error: "خطای سرور" });
+    }
   };
+
   getUser = async (req, res) => {
     const { id, role } = req;
     try {

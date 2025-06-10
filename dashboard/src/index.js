@@ -18,11 +18,11 @@ root.render(
         <App />
         <Toaster
           toastOptions={{
-            position: "top-right",
+            position: "top-left",
             style: {
               background: "#283046",
-              color: "white",
-            },
+              color: "white"
+            }
           }}
         />
       </Suspense>

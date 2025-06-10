@@ -1,5 +1,5 @@
 //src/views/auth/Register.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AiOutlineGooglePlus } from "react-icons/ai";
 import { FaGithub } from "react-icons/fa";
@@ -7,11 +7,18 @@ import { FaXTwitter } from "react-icons/fa6";
 import { CiFacebook } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
 import { overrideStyle } from "../../utils/utils";
-import { seller_register } from "../../store/Reducers/authReducer";
+import {
+  seller_register,
+  messageClear
+} from "../../store/Reducers/authReducer";
 import { PropagateLoader } from "react-spinners";
+
+import toast from "react-hot-toast";
 function Register() {
   const dispatch = useDispatch();
-  const { loader } = useSelector((state) => state.auth);
+  const { loader, errorMessage, successMessage } = useSelector(
+    (state) => state.auth
+  );
 
   const [state, setState] = useState({
     name: "",
@@ -28,6 +35,17 @@ function Register() {
     e.preventDefault();
     dispatch(seller_register(state));
   };
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(messageClear());
+    }
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(messageClear());
+    }
+  }, [successMessage, errorMessage]);
   return (
     <div className="bg-light-mode dark:bg-dark-mode text-light-text dark:text-light min-h-screen  flex  items-center justify-center transition-colors duration-300 ">
       <div className="loginFrm dark:bg-dark-mode dark:text-dark-text backdrop-blur-sm p-16 rounded-2xl shadow-2xl w-96 transition-all">
