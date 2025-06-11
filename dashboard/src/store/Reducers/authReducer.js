@@ -1,7 +1,7 @@
 //dashboard/src/store/reduces/authReducer.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { jwtDecode } from "jwt-decode";
 import api from "../../api/api";
-
 export const admin_login = createAsyncThunk(
   "auth/admin_login",
   async (info, { rejectWithValue, fulfillWithValue }) => {
@@ -24,8 +24,8 @@ export const seller_login = createAsyncThunk(
       const { data } = await api.post("/seller-login", info, {
         withCredentials: true
       });
-      console.log(data);
-      // localStorage.setItem("accessToken", data.token);
+      // console.log(data);
+      localStorage.setItem("accessToken", data.token);
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -43,7 +43,7 @@ export const seller_register = createAsyncThunk(
       });
 
       // localStorage.setItem("accessToken", data.token);
-      console.log("data", data);
+      // console.log("data", data);
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -54,7 +54,7 @@ export const get_user_info = createAsyncThunk(
   "auth/get_user_info",
   async (_, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const { data } = await api.get("/get-info", {
+      const { data } = await api.get("/get-user", {
         withCredentials: true
       });
 
@@ -64,7 +64,48 @@ export const get_user_info = createAsyncThunk(
     }
   }
 );
+const returnRole = (token) => {
+  if (!token) return ""; // اگر توکن وجود نداشت
 
+  try {
+    const deCodeToken = jwtDecode(token);
+    const expireTime = new Date(deCodeToken.exp * 1000);
+
+    if (new Date() > expireTime) {
+      localStorage.removeItem("accessToken");
+      return "";
+    }
+
+    return deCodeToken.role; // اگر توکن معتبر بود
+  } catch (error) {
+    return ""; // اگر خطایی در decode رخ داد
+  }
+};
+const getUserFromToken = (token) => {
+  if (!token) return { role: "", userInfo: null };
+
+  try {
+    const deCodeToken = jwtDecode(token);
+    const expireTime = new Date(deCodeToken.exp * 1000);
+
+    if (new Date() > expireTime) {
+      localStorage.removeItem("accessToken");
+      return { role: "", userInfo: null };
+    }
+
+    return {
+      role: deCodeToken.role,
+      userInfo: {
+        id: deCodeToken.id,
+        name: deCodeToken.name,
+        email: deCodeToken.email
+        // سایر اطلاعات کاربر
+      }
+    };
+  } catch (error) {
+    return { role: "", userInfo: null };
+  }
+};
 export const authReducer = createSlice({
   name: "auth",
   initialState: {
@@ -72,7 +113,7 @@ export const authReducer = createSlice({
     errorMessage: "",
     loader: false,
     userInfo: "",
-    role: "",
+    role: returnRole(localStorage.getItem("accessToken")),
     token: ""
   },
   reducers: {
@@ -88,10 +129,21 @@ export const authReducer = createSlice({
         state.errorMessage = "";
         state.successMessage = "";
       })
+      // .addCase(admin_login.fulfilled, (state, action) => {
+      //   state.loader = false;
+      //   state.successMessage = "ورود با موفقیت انجام شد";
+      //   state.token = action.payload.token;
+      //   state.role = returnRole(action.payload.token);
+      // })
       .addCase(admin_login.fulfilled, (state, action) => {
+        const { token } = action.payload;
+        const { role, userInfo } = getUserFromToken(token);
+
         state.loader = false;
-        state.userInfo = action.payload;
         state.successMessage = "ورود با موفقیت انجام شد";
+        state.token = token;
+        state.role = role;
+        state.userInfo = userInfo;
       })
       .addCase(admin_login.rejected, (state, action) => {
         state.loader = false;
@@ -104,10 +156,22 @@ export const authReducer = createSlice({
         state.errorMessage = "";
         state.successMessage = "";
       })
+      // .addCase(seller_login.fulfilled, (state, action) => {
+      //   state.loader = false;
+      //   state.userInfo = action.payload;
+      //   state.successMessage = "ورود با موفقیت انجام شد";
+      //   state.token = action.payload.token;
+      //   state.role = returnRole(action.payload.token);
+      // })
       .addCase(seller_login.fulfilled, (state, action) => {
+        const { token } = action.payload;
+        const { role, userInfo } = getUserFromToken(token);
+
         state.loader = false;
-        state.userInfo = action.payload;
         state.successMessage = "ورود با موفقیت انجام شد";
+        state.token = token;
+        state.role = role;
+        state.userInfo = userInfo;
       })
       .addCase(seller_login.rejected, (state, action) => {
         state.loader = false;

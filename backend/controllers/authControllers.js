@@ -105,10 +105,11 @@ class authControllers {
         responseReturn(res, 200, { userInfo: user });
       } else {
         // responseReturn(res, 404, { error: "شما به این صفحه دسترسی ندارید" });
-        console.log("seller info");
+        const seller = await adminModel.findById(id);
+        responseReturn(res, 200, { userInfo: seller });
       }
     } catch (error) {
-      console.log(error.message);
+      responseReturn(res, 500, { error: "خطای سرور" });
     }
   };
 }
