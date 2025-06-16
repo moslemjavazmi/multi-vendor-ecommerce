@@ -1,6 +1,6 @@
 //src/views/auth/Register.jsx
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineGooglePlus } from "react-icons/ai";
 import { FaGithub } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
@@ -15,6 +15,7 @@ import { PropagateLoader } from "react-spinners";
 
 import toast from "react-hot-toast";
 function Register() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loader, errorMessage, successMessage } = useSelector(
     (state) => state.auth
@@ -40,6 +41,7 @@ function Register() {
     if (successMessage) {
       toast.success(successMessage);
       dispatch(messageClear());
+      navigate("/");
     }
     if (errorMessage) {
       toast.error(errorMessage);

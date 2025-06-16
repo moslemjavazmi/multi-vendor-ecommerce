@@ -1,5 +1,4 @@
 import { lazy } from "react";
-const Home = lazy(() => import("../../views/pages/Home"));
 const SellerDashboard = lazy(() =>
   import("../../views/seller/SellerDashboard")
 );
@@ -17,11 +16,18 @@ const SellerToCustomer = lazy(() =>
 const Profile = lazy(() => import("../../views/seller/Profile"));
 const EditProduct = lazy(() => import("../../views/seller/EditProduct"));
 const OrderDetails = lazy(() => import("../../views/seller/OrderDetails"));
+const Pending = lazy(() => import("../../views/Pending"));
+const Deactive = lazy(() => import("../../views/Deactive"));
 export const sellerRoutes = [
   {
-    path: "/",
-    element: <Home />,
-    ability: ["admin", "seller"]
+    path: "seller/account-pending",
+    element: <Pending />,
+    ability: "seller"
+  },
+  {
+    path: "seller/account-deactive",
+    element: <Deactive />,
+    ability: "seller"
   },
   {
     path: "seller/dashboard",
@@ -77,7 +83,7 @@ export const sellerRoutes = [
   {
     path: "seller/dashboard/chat-support",
     element: <SellerToAdmin />,
-    ability: ["active", "deactive", "pending"]
+    visibility: ["active", "deactive", "pending"]
   },
   {
     path: "seller/dashboard/chat-customer",

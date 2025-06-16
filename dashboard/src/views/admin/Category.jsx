@@ -21,6 +21,10 @@ const Category = () => {
     name: "",
     image: ""
   });
+  const imageHandle = (e) => {
+    let files = e.target.files;
+    console.log(files);
+  };
 
   //   const imageHandle = (e) => {
   //     let files = e.target.files;
@@ -184,6 +188,7 @@ const Category = () => {
                 </div>
                 <input
                   className="hidden"
+                  onChange={imageHandle}
                   type="file"
                   name="image"
                   id="image"

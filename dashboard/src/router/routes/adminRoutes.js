@@ -13,51 +13,51 @@ export const adminRoutes = [
   {
     path: "admin/dashboard",
     element: <AdminDashboard />,
-    role: "admin",
+    role: "admin"
   },
   {
     path: "admin/dashboard/orders",
     element: <Orders />,
-    role: "admin",
+    role: "admin"
   },
   {
     path: "admin/dashboard/category",
     element: <Category />,
-    role: "admin",
+    role: "admin"
   },
   {
     path: "admin/dashboard/sellers",
     element: <Seller />,
-    role: "admin",
+    role: "admin"
   },
   {
     path: "admin/dashboard/payment-request",
     element: <PaymentRequest />,
-    role: "admin",
+    role: "admin"
   },
   {
     path: "admin/dashboard/deactive-sellers",
     element: <DeactiveSeller />,
-    role: "admin",
+    role: "admin"
   },
   {
     path: "admin/dashboard/sellers-request",
     element: <SellerRequest />,
-    role: "admin",
+    role: "admin"
   },
   {
     path: "admin/dashboard/seller/details/:sellerId",
     element: <SellerDetails />,
-    role: "admin",
+    role: "admin"
   },
   {
     path: "admin/dashboard/chat-sellers/",
     element: <ChatSeller />,
-    role: "admin",
+    role: "admin"
   },
   {
     path: "admin/dashboard/order/details/:orderId",
     element: <OrderDetails />,
-    role: "admin",
-  },
+    role: "admin"
+  }
 ];
