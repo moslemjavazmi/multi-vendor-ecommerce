@@ -4,13 +4,11 @@ import ProtectRoute from "./ProtectRoute";
 export const getRoutes = () => {
   const allRoute = [];
   privateRoutes.map((r) => {
-    r.element = <ProtectRoute route={r}>{r.element}</ProtectRoute>;
+    // r.element = <ProtectRoute route={r}>{r.element}</ProtectRoute>;
   });
-  return [
-    {
-      path: "/",
-      element: <MainLayout />,
-      children: privateRoutes
-    }
-  ];
+  return {
+    path: "/",
+    element: <MainLayout />,
+    children: privateRoutes
+  };
 };

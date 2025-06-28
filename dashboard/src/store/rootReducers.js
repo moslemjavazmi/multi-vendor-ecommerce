@@ -1,3 +1,4 @@
 import authReducer from "./Reducers/authReducer";
-const rootReducer = { auth: authReducer };
+import categoryReducer from "./Reducers/categoryReducer";
+const rootReducer = { auth: authReducer, category: categoryReducer };
 export default rootReducer;

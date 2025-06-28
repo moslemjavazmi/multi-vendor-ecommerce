@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
-
+import { overrideStyle } from "../../utils/utils";
 import { GrClose } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import { BsImage } from "react-icons/bs";
 import toast from "react-hot-toast";
+import { useSelector, useDispatch } from "react-redux";
+import { categoryAdd } from "../../store/Reducers/categoryReducer";
 // import Search from "../components/Search";
-
+import { PropagateLoader } from "react-spinners";
 const Category = () => {
-  //   const dispatch = useDispatch();
-  //   const { loader, successMessage, errorMessage, categorys } = useSelector(
-  //     (state) => state.category
-  //   );
+  const dispatch = useDispatch();
+  const { loader } = useSelector((state) => state.category);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [parPage, setParPage] = useState(5);
@@ -21,25 +21,22 @@ const Category = () => {
     name: "",
     image: ""
   });
+
   const imageHandle = (e) => {
     let files = e.target.files;
-    console.log(files);
+    if (files.length > 0) {
+      setImage(URL.createObjectURL(files[0]));
+      setState({
+        ...state,
+        image: files
+      });
+      console.log("state", state);
+    }
   };
-
-  //   const imageHandle = (e) => {
-  //     let files = e.target.files;
-  //     if (files.length > 0) {
-  //       setImage(URL.createObjectURL(files[0]));
-  //       setState({
-  //         ...state,
-  //         image: files[0]
-  //       });
-  //     }
-  //   };
-  //   const add_category = (e) => {
-  //     e.preventDefault();
-  //     dispatch(categoryAdd(state));
-  //   };
+  const add_category = (e) => {
+    e.preventDefault();
+    dispatch(categoryAdd(state));
+  };
 
   //   useEffect(() => {
   //     if (errorMessage) {
@@ -67,7 +64,7 @@ const Category = () => {
   //   }, [searchValue, currentPage, parPage]);
   return (
     <div className="px-2 lg:px-7 pt-5">
-      <div className="flex lg:hidden justify-between items-center mb-5 p-4 bg-[#283046] rounded-md">
+      <div className="flex lg:hidden justify-between items-center mb-5 p-4 bg-blue-mode rounded-md">
         <h1 className="text-[#d0d2d6] font-semibold text-lg">Categorys</h1>
         <button
           onClick={() => setShow(true)}
@@ -78,7 +75,7 @@ const Category = () => {
       </div>
       <div className="flex flex-wrap w-full">
         <div className="w-full lg:w-7/12">
-          <div className="w-full p-4  bg-[#283046] rounded-md">
+          <div className="w-full p-4  bg-blue-mode rounded-md">
             {/* <Search
               setParPage={setParPage}
               setSearchValue={setSearchValue}
@@ -154,7 +151,7 @@ const Category = () => {
           } z-[9999] top-0 transition-all duration-500`}
         >
           <div className="w-full pl-5">
-            <div className="bg-[#283046] h-screen lg:h-auto px-3 py-2 lg:rounded-md text-[#d0d2d6]">
+            <div className="bg-blue-mode h-screen lg:h-auto px-3 py-2 lg:rounded-md text-[#d0d2d6]">
               <div className="flex justify-between items-center mb-4">
                 <h1 className="text-[#d0d2d6] font-semibold text-xl">
                   Add Category
@@ -166,17 +163,19 @@ const Category = () => {
                   <GrClose className="text-[#d0d2d6]" />
                 </div>
               </div>
-              <form onSubmit>
+              <form onSubmit={add_category}>
                 <div className="flex flex-col w-full gap-1 mb-3">
-                  <label htmlFor="name">Category name</label>
+                  <label htmlFor="name">نام دسته بندی</label>
                   <input
-                    // value={state.name}
-
-                    className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#283046] border border-slate-700 rounded-md text-[#d0d2d6]"
+                    className="px-4 py-2 focus:border-indigo-500 outline-none bg-blue-mode border border-slate-700 rounded-md text-[#d0d2d6]"
                     type="text"
                     id="name"
                     name="category_name"
-                    placeholder="category name"
+                    placeholder="نام دسته بندی"
+                    value={state.name}
+                    onChange={(e) =>
+                      setState({ ...state, name: e.target.value })
+                    }
                     required
                   />
                 </div>
@@ -184,7 +183,18 @@ const Category = () => {
                   <label
                     className="flex justify-center items-center flex-col h-[238px] cursor-pointer border border-dashed hover:border-indigo-500 w-full border-[#d0d2d6]"
                     htmlFor="image"
-                  ></label>
+                  >
+                    {imageShow ? (
+                      <img src={imageShow} className="w-full h-full" />
+                    ) : (
+                      <>
+                        <span>
+                          <BsImage />
+                        </span>
+                        <span>عکس مورد نظر خود را انتخاب کنید</span>
+                      </>
+                    )}
+                  </label>
                 </div>
                 <input
                   className="hidden"
@@ -196,14 +206,14 @@ const Category = () => {
                 />
                 <div className="mt-4">
                   <button className="bg-blue-500 w-full hover:shadow-blue-500/20 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3">
-                    {/* {loader ? (
+                    {loader ? (
                       <PropagateLoader
                         color="#fff"
                         cssOverride={overrideStyle}
                       />
                     ) : (
                       "Add Category"
-                    )} */}
+                    )}
                   </button>
                 </div>
               </form>
