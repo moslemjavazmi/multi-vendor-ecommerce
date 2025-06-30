@@ -1,14 +1,14 @@
-//dashboard/src/store/reduces/authReducer.js
+//dashboard/src/store/reduces/categoryReducer.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../api/api";
 export const categoryAdd = createAsyncThunk(
   "category/categoryAdd",
   async ({ name, image }, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const formDate = new FormData();
-      formDate.append("name", name);
-      formDate.append("image", image);
-      const { data } = await api.post("/category-add", formDate, {
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("image", image);
+      const { data } = await api.post("/category-add", formData, {
         withCredentials: true
       });
       console.log("data in cate store", data);
@@ -41,16 +41,11 @@ export const categoryReducer = createSlice({
         state.successMessage = "";
       })
 
-      // .addCase(categoryAdd.fulfilled, (state, action) => {
-      //   const { token } = action.payload;
-      //   const { role, userInfo } = getUserFromToken(token);
-
-      //   state.loader = false;
-      //   state.successMessage = "ورود با موفقیت انجام شد";
-      //   state.token = token;
-      //   state.role = role;
-      //   state.userInfo = userInfo;
-      // })
+      .addCase(categoryAdd.fulfilled, (state, action) => {
+        state.loader = false;
+        state.successMessage = "دسته بندی با موفقیت اضافه ش";
+        state.categorys = [...state.categorys, action.payload.category];
+      })
       .addCase(categoryAdd.rejected, (state, action) => {
         state.loader = false;
         // state.userInfo = action.payload;

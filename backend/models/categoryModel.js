@@ -6,17 +6,20 @@ const categorySchema = new Schema(
       type: String,
       required: true
     },
-
     image: {
       type: String,
       required: true
     },
     slug: {
       type: String,
-      default: "admin"
+      required: true
     }
   },
   { timestamps: true }
 );
-categorySchema.index({ name: "text" });
-module.exports = model("admins", categorySchema);
+
+categorySchema.index({
+  name: "text"
+});
+
+module.exports = model("categorys", categorySchema);

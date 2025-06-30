@@ -1,3 +1,4 @@
+//dashboard/src/view/admin/Category.js
 import React, { useEffect, useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { overrideStyle } from "../../utils/utils";
@@ -28,9 +29,8 @@ const Category = () => {
       setImage(URL.createObjectURL(files[0]));
       setState({
         ...state,
-        image: files
+        image: files[0]
       });
-      console.log("state", state);
     }
   };
   const add_category = (e) => {
@@ -163,7 +163,7 @@ const Category = () => {
                   <GrClose className="text-[#d0d2d6]" />
                 </div>
               </div>
-              <form onSubmit={add_category}>
+              <form onSubmit={add_category} encType="multipart/form-data">
                 <div className="flex flex-col w-full gap-1 mb-3">
                   <label htmlFor="name">نام دسته بندی</label>
                   <input
