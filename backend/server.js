@@ -3,6 +3,7 @@ const { connectDB } = require("./utiles/db");
 const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const path = require("path");
 const cookieParser = require("cookie-parser");
 
 require("dotenv").config();
@@ -18,7 +19,8 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use("/api", require("./routes/authRoutes"));
 app.use("/api", require("./routes/dashboard/categoryRoutes"));
-
+app.use("/api", require("./routes/dashboard/productRoutes"));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.get("/", (req, res) => res.send("Hello World!"));
 const port = process.env.PORT || 5000;
 connectDB();

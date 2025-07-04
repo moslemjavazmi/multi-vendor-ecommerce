@@ -1,32 +1,29 @@
 //dashboard/src/store/reduces/categoryReducer.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../api/api";
-export const categoryAdd = createAsyncThunk(
-  "category/categoryAdd",
-  async ({ name, image }, { rejectWithValue, fulfillWithValue }) => {
+export const productAdd = createAsyncThunk(
+  "product/product-add",
+  async (product, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const formData = new FormData();
-      formData.append("name", name);
-      formData.append("image", image);
-      const { data } = await api.post("/category-add", formData, {
+      const { data } = await api.post("/product-add", product, {
         withCredentials: true
       });
-      console.log("data in cate store", data);
+      // console.log("data in cate store", data);
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
   }
 );
-export const getCategory = createAsyncThunk(
-  "category/get-category",
+export const getProduct = createAsyncThunk(
+  "product/get-product",
   async (
     { perPage, page, searchValue },
     { rejectWithValue, fulfillWithValue }
   ) => {
     try {
       const { data } = await api.get(
-        `get-category?page=${page}&&searchValue=${searchValue}&&perPage=${perPage}`,
+        `get-product?page=${page}&&searchValue=${searchValue}&&perPage=${perPage}`,
         {
           withCredentials: true
         }
@@ -40,14 +37,14 @@ export const getCategory = createAsyncThunk(
   }
 );
 
-export const categoryReducer = createSlice({
-  name: "category",
+export const productReducer = createSlice({
+  name: "product",
   initialState: {
     successMessage: "",
     errorMessage: "",
     loader: false,
-    categorys: [],
-    totalCategory: 0
+    products: [],
+    totalProduct: 0
   },
   reducers: {
     messageClear: (state, _) => {
@@ -57,27 +54,27 @@ export const categoryReducer = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(categoryAdd.pending, (state, _) => {
+      .addCase(productAdd.pending, (state, _) => {
         state.loader = true;
         state.errorMessage = "";
         state.successMessage = "";
       })
 
-      .addCase(categoryAdd.fulfilled, (state, action) => {
+      .addCase(productAdd.fulfilled, (state, action) => {
         state.loader = false;
-        state.successMessage = "دسته بندی با موفقیت اضافه شد";
+        state.successMessage = "محصول جدید با موفقیت اضافه شد";
         state.categorys = [...state.categorys, action.payload.category];
       })
-      .addCase(categoryAdd.rejected, (state, action) => {
+      .addCase(productAdd.rejected, (state, action) => {
         state.loader = false;
-        state.errorMessage = "اضافه کردن دسته بندی با خطا مواجه شد";
+        state.errorMessage = "اضافه کردن محصول جدید با خطا مواجه شد";
       })
-      .addCase(getCategory.fulfilled, (state, action) => {
+      .addCase(getProduct.fulfilled, (state, action) => {
         state.loader = false;
         state.categorys = action.payload.categorys;
         state.totalCategory = action.payload.totalCategory;
       });
   }
 });
-export const { messageClear } = categoryReducer.actions;
-export default categoryReducer.reducer;
+export const { messageClear } = productReducer.actions;
+export default productReducer.reducer;

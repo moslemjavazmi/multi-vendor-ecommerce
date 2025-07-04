@@ -6,16 +6,23 @@ import { GrClose } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import { BsImage } from "react-icons/bs";
 import toast from "react-hot-toast";
+import Pagination from "../Pagination";
 import { useSelector, useDispatch } from "react-redux";
-import { categoryAdd } from "../../store/Reducers/categoryReducer";
-// import Search from "../components/Search";
+import {
+  categoryAdd,
+  messageClear,
+  getCategory
+} from "../../store/Reducers/categoryReducer";
+import Search from "../components/Search";
 import { PropagateLoader } from "react-spinners";
 const Category = () => {
   const dispatch = useDispatch();
-  const { loader } = useSelector((state) => state.category);
+  const { loader, errorMessage, successMessage, categorys } = useSelector(
+    (state) => state.category
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
-  const [parPage, setParPage] = useState(5);
+  const [perPage, setPerPage] = useState(5);
   const [show, setShow] = useState(false);
   const [imageShow, setImage] = useState("");
   const [state, setState] = useState({
@@ -38,30 +45,30 @@ const Category = () => {
     dispatch(categoryAdd(state));
   };
 
-  //   useEffect(() => {
-  //     if (errorMessage) {
-  //       toast.error(errorMessage);
-  //       dispatch(messageClear());
-  //     }
-  //     if (successMessage) {
-  //       toast.success(successMessage);
-  //       dispatch(messageClear());
-  //       setState({
-  //         name: "",
-  //         image: ""
-  //       });
-  //       setImage("");
-  //     }
-  //   }, [successMessage, errorMessage]);
+  useEffect(() => {
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(messageClear());
+    }
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(messageClear());
+      setState({
+        name: "",
+        image: ""
+      });
+      setImage("");
+    }
+  }, [successMessage, errorMessage]);
 
-  //   useEffect(() => {
-  //     const obj = {
-  //       parPage: parseInt(parPage),
-  //       page: parseInt(currentPage),
-  //       searchValue
-  //     };
-  //     dispatch(get_category(obj));
-  //   }, [searchValue, currentPage, parPage]);
+  useEffect(() => {
+    const obj = {
+      perPage: parseInt(perPage),
+      page: parseInt(currentPage),
+      searchValue
+    };
+    dispatch(getCategory(obj));
+  }, [searchValue, currentPage, perPage]);
   return (
     <div className="px-2 lg:px-7 pt-5">
       <div className="flex lg:hidden justify-between items-center mb-5 p-4 bg-blue-mode rounded-md">
@@ -76,11 +83,11 @@ const Category = () => {
       <div className="flex flex-wrap w-full">
         <div className="w-full lg:w-7/12">
           <div className="w-full p-4  bg-blue-mode rounded-md">
-            {/* <Search
-              setParPage={setParPage}
+            <Search
+              setParPage={setPerPage}
               setSearchValue={setSearchValue}
               searchValue={searchValue}
-            /> */}
+            />
             <div className="relative overflow-x-auto">
               <table className="w-full text-sm text-left text-[#d0d2d6]">
                 <thead className="text-sm text-[#d0d2d6] uppercase border-b border-slate-700">
@@ -100,7 +107,7 @@ const Category = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {/* {categorys.map((d, i) => (
+                  {categorys.map((d, i) => (
                     <tr key={i}>
                       <td
                         scope="row"
@@ -114,8 +121,8 @@ const Category = () => {
                       >
                         <img
                           className="w-[45px] h-[45px]"
-                          src={d.image}
-                          alt=""
+                          src={`http://localhost:5000/${d.image}`}
+                          alt={d.name}
                         />
                       </td>
                       <td
@@ -138,11 +145,19 @@ const Category = () => {
                         </div>
                       </td>
                     </tr>
-                  ))} */}
+                  ))}
                 </tbody>
               </table>
             </div>
-            <div className="w-full flex justify-end mt-4 bottom-4 right-4"></div>
+            <div className="w-full flex justify-center mt-4 bottom-4 ">
+              <Pagination
+                pageNumber={currentPage}
+                setPageNumber={setCurrentPage}
+                totalItem={50}
+                parPage={perPage}
+                showItem={4}
+              />
+            </div>
           </div>
         </div>
         <div
@@ -154,7 +169,7 @@ const Category = () => {
             <div className="bg-blue-mode h-screen lg:h-auto px-3 py-2 lg:rounded-md text-[#d0d2d6]">
               <div className="flex justify-between items-center mb-4">
                 <h1 className="text-[#d0d2d6] font-semibold text-xl">
-                  Add Category
+                  اضافه کردن دسته بندی
                 </h1>
                 <div
                   onClick={() => setShow(false)}
@@ -165,7 +180,7 @@ const Category = () => {
               </div>
               <form onSubmit={add_category} encType="multipart/form-data">
                 <div className="flex flex-col w-full gap-1 mb-3">
-                  <label htmlFor="name">نام دسته بندی</label>
+                  <label htmlFor="name"> دسته بندی</label>
                   <input
                     className="px-4 py-2 focus:border-indigo-500 outline-none bg-blue-mode border border-slate-700 rounded-md text-[#d0d2d6]"
                     type="text"
@@ -212,7 +227,7 @@ const Category = () => {
                         cssOverride={overrideStyle}
                       />
                     ) : (
-                      "Add Category"
+                      "افزودن"
                     )}
                   </button>
                 </div>
