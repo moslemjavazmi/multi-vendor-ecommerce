@@ -11,7 +11,7 @@ import { getCategory } from "../../store/Reducers/categoryReducer";
 import { productAdd, messageClear } from "../../store/Reducers/productReducer";
 
 const AddProduct = () => {
-  // const editor = useRef(null);
+  const editor = useRef(null);
   const [content, setContent] = useState("");
 
   // const config = useMemo(() => ({
@@ -31,7 +31,7 @@ const AddProduct = () => {
     dispatch(
       getCategory({
         searchValue: "",
-        perPage: "",
+        parPage: "",
         page: ""
       })
     );
@@ -69,7 +69,7 @@ const AddProduct = () => {
   };
   const [images, setImages] = useState([]);
   const [imageShow, setImageShow] = useState([]);
-  const imageHandle = (e) => {
+  const inmageHandle = (e) => {
     const files = e.target.files;
     const length = files.length;
 
@@ -158,7 +158,7 @@ const AddProduct = () => {
           </Link>
         </div>
         <div>
-          <form onSubmit={add}>
+          <form onSubmit={add} encType="multipart/form-data">
             <div className="flex flex-col mb-3 md:flex-row gap-4 w-full text-[#d0d2d6]">
               <div className="flex flex-col w-full gap-1">
                 <label htmlFor="name">Product name</label>
@@ -276,14 +276,14 @@ const AddProduct = () => {
             </div>
             <div className="flex flex-col w-full gap-1 text-[#d0d2d6] mb-5">
               <label htmlFor="description">Description</label>
-              {/* <JoditEditor
+              <JoditEditor
                 ref={editor}
                 value={content}
                 // config={config}
                 tabIndex={1} // tabIndex of textarea
                 onBlur={(newContent) => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
                 onChange={(newContent) => {}}
-              /> */}
+              />
             </div>
             <div className="grid lg:grid-cols-4 grid-cols-1 md:grid-cols-3 sm:grid-cols-2 sm:gap-4 md:gap-4 xs:gap-4 gap-3 w-full text-[#d0d2d6] mb-4">
               {imageShow.map((img, i) => (
@@ -320,7 +320,7 @@ const AddProduct = () => {
               </label>
               <input
                 multiple
-                onChange={imageHandle}
+                onChange={inmageHandle}
                 className="hidden"
                 type="file"
                 id="image"
