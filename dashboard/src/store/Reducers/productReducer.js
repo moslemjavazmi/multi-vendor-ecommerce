@@ -29,31 +29,65 @@ export const getProducts = createAsyncThunk(
           withCredentials: true
         }
       );
-
+      console.log("data in pro reducer", data);
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
   }
 );
-export const getProduct = createAsyncThunk(
+// export const getProduct = createAsyncThunk(
+//   "product/get_product",
+//   async (productId, { rejectWithValue, fulfillWithValue }) => {
+//     // const token = getState().auth.token;
+//     // const config = {
+//     //   headers: {
+//     //     Authorization: `Bearer ${token}`
+//     //   }
+//     // };
+//     console.log("productId in reducer", productId);
+//     try {
+//       const { data } = await api.get(`product-get/${productId}`);
+//       return fulfillWithValue(data);
+//     } catch (error) {
+//       return rejectWithValue(error.response.data);
+//     }
+//   }
+// );
+export const get_product = createAsyncThunk(
   "product/get_product",
-  async (productId, { rejectWithValue, fulfillWithValue, getState }) => {
-    const token = getState().auth.token;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    };
+  async (ProductId, { rejectWithValue, fulfillWithValue }) => {
+    // const token = getState().auth.token;
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${token}`
+    //   }
+    // };
     try {
-      const { data } = await api.get(`get-product/${productId}`, config);
+      const { data } = await api.get(`/product-get/${ProductId}`, {
+        withCredentials: true
+      });
+      console.log("data in get pro test", data);
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
   }
 );
-
+export const update_product = createAsyncThunk(
+  "product/update_product",
+  async (product, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post(`/product-update`, product, {
+        withCredentials: true
+      });
+      console.log("data in update reducer ", data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 export const productReducer = createSlice({
   name: "product",
   initialState: {
@@ -92,9 +126,22 @@ export const productReducer = createSlice({
         state.products = action.payload.products || [];
         state.totalproduct = action.payload.totalproduct || 0;
       })
-      .addCase(getProduct.fulfilled, (state, action) => {
+      .addCase(get_product.fulfilled, (state, action) => {
         state.loader = false;
-        state.product = action.payload.product || [];
+        state.product = action.payload.product;
+      })
+      .addCase(update_product.pending, (state, _) => {
+        state.loader = true;
+        state.errorMessage = "";
+        state.successMessage = "";
+      })
+      .addCase(update_product.rejected, (state, action) => {
+        state.loader = false;
+        state.errorMessage = "بروز رسانی محصول با خطا مواجه شد";
+      })
+      .addCase(update_product.fulfilled, (state, action) => {
+        state.loader = false;
+        state.product = action.payload.product;
       });
   }
 });

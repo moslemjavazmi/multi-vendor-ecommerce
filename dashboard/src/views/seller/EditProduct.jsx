@@ -5,9 +5,9 @@ import { PropagateLoader } from "react-spinners";
 import toast from "react-hot-toast";
 import { getCategory } from "../../store/Reducers/categoryReducer";
 import {
-  getProducts,
-  messageClear,
-  update_product
+  get_product,
+  update_product,
+  messageClear
 } from "../../store/Reducers/productReducer";
 import JoditEditor from "jodit-react";
 import { BsImages } from "react-icons/bs";
@@ -17,7 +17,7 @@ const EditProduct = () => {
   const editor = useRef(null);
   const [content, setContent] = useState("");
 
-  const { productId } = useParams();
+  const { ProductId } = useParams();
   const dispatch = useDispatch();
   const { categorys } = useSelector((state) => state.category);
   const { product, loader, errorMessage, successMessage } = useSelector(
@@ -48,8 +48,8 @@ const EditProduct = () => {
   };
 
   useEffect(() => {
-    dispatch(getProducts(productId));
-  }, [productId]);
+    dispatch(get_product(ProductId));
+  }, [ProductId]);
 
   const [cateShow, setCateShow] = useState(false);
   const [category, setCategory] = useState("");
@@ -75,25 +75,25 @@ const EditProduct = () => {
       //   product_image_update({
       //     oldImage: img,
       //     newImage: files[0],
-      //     productId
+      //     ProductId
       //   })
       // );
     }
   };
 
-  // useEffect(() => {
-  //   setState({
-  //     name: product.name,
-  //     description: product.description,
-  //     discount: product.discount,
-  //     price: product.price,
-  //     brand: product.brand,
-  //     stock: product.stock
-  //   });
-  //   setContent(product.description);
-  //   setCategory(product.category);
-  //   setImageShow(product.images);
-  // }, [product]);
+  useEffect(() => {
+    setState({
+      name: product.name,
+      description: product.description,
+      discount: product.discount,
+      price: product.price,
+      brand: product.brand,
+      stock: product.stock
+    });
+    setContent(product.description);
+    setCategory(product.category);
+    setImageShow(product.images);
+  }, [product]);
   useEffect(() => {
     if (categorys.length > 0) {
       setAllCategory(categorys);
@@ -120,28 +120,29 @@ const EditProduct = () => {
       price: state.price,
       brand: state.brand,
       stock: state.stock,
-      productId: productId
+      productId: ProductId
     };
     console.log(obj);
-    // dispatch(update_product(obj));
+    dispatch(update_product(obj));
   };
+  console.log("imageShow", imageShow);
   return (
     <div className="px-2 lg:px-7 pt-5 ">
       <div className="w-full p-4  bg-blue-mode rounded-md">
         <div className="flex justify-between items-center pb-4">
-          <h1 className="text-[#d0d2d6] text-xl font-semibold">Edit Product</h1>
+          <h1 className="text-[#d0d2d6] text-xl font-semibold">ویرایش محصول</h1>
           <Link
             className="bg-blue-500 hover:shadow-blue-500/50 hover:shadow-lg text-white rounded-sm px-7 py-2 my-2 "
             to="/seller/dashboard/products"
           >
-            Products
+            محصولات
           </Link>
         </div>
         <div>
           <form onSubmit={update}>
             <div className="flex flex-col mb-3 md:flex-row gap-4 w-full text-[#d0d2d6]">
               <div className="flex flex-col w-full gap-1">
-                <label htmlFor="name">Product name</label>
+                <label htmlFor="name">نام محصول</label>
                 <input
                   className="px-4 py-2 focus:border-indigo-500 outline-none bg-blue-mode border border-slate-700 rounded-md text-[#d0d2d6]"
                   onChange={inputHandle}
@@ -153,7 +154,7 @@ const EditProduct = () => {
                 />
               </div>
               <div className="flex flex-col w-full gap-1">
-                <label htmlFor="brand">Product brand</label>
+                <label htmlFor="brand">برند محصول</label>
                 <input
                   className="px-4 py-2 focus:border-indigo-500 outline-none bg-blue-mode border border-slate-700 rounded-md text-[#d0d2d6]"
                   onChange={inputHandle}
@@ -167,7 +168,7 @@ const EditProduct = () => {
             </div>
             <div className="flex flex-col mb-3 md:flex-row gap-4 w-full text-[#d0d2d6]">
               <div className="flex flex-col w-full gap-1 relative">
-                <label htmlFor="category">Category</label>
+                <label htmlFor="category">دسته محصول</label>
                 <input
                   readOnly
                   onClick={() => setCateShow(!cateShow)}
@@ -197,6 +198,7 @@ const EditProduct = () => {
                     {allCategory.length > 0 &&
                       allCategory.map((c, i) => (
                         <span
+                          key={i}
                           className={`px-4 py-2 hover:bg-indigo-500 hover:text-white hover:shadow-lg w-full cursor-pointer ${
                             category === c.name && "bg-indigo-500"
                           }`}
@@ -214,7 +216,7 @@ const EditProduct = () => {
                 </div>
               </div>
               <div className="flex flex-col w-full gap-1">
-                <label htmlFor="stock">Stock</label>
+                <label htmlFor="stock">تعداد</label>
                 <input
                   className="px-4 py-2 focus:border-indigo-500 outline-none bg-blue-mode border border-slate-700 rounded-md text-[#d0d2d6]"
                   onChange={inputHandle}
@@ -230,7 +232,7 @@ const EditProduct = () => {
 
             <div className="flex flex-col mb-3 md:flex-row gap-4 w-full text-[#d0d2d6]">
               <div className="flex flex-col w-full gap-1">
-                <label htmlFor="price">Price</label>
+                <label htmlFor="price">قیمت</label>
                 <input
                   className="px-4 py-2 focus:border-indigo-500 outline-none bg-blue-mode border border-slate-700 rounded-md text-[#d0d2d6]"
                   onChange={inputHandle}
@@ -242,7 +244,7 @@ const EditProduct = () => {
                 />
               </div>
               <div className="flex flex-col w-full gap-1">
-                <label htmlFor="discount">Discount</label>
+                <label htmlFor="discount">تخفیف</label>
                 <input
                   className="px-4 py-2 focus:border-indigo-500 outline-none bg-blue-mode border border-slate-700 rounded-md text-[#d0d2d6]"
                   onChange={inputHandle}
@@ -255,7 +257,7 @@ const EditProduct = () => {
               </div>
             </div>
             <div className="flex flex-col w-full gap-1 text-[#d0d2d6] mb-5">
-              <label htmlFor="description">Description</label>
+              <label htmlFor="description">توضیحات تکمیلی</label>
               <JoditEditor
                 ref={editor}
                 value={content}
@@ -269,9 +271,13 @@ const EditProduct = () => {
               {imageShow &&
                 imageShow.length > 0 &&
                 imageShow.map((img, i) => (
-                  <div>
+                  <div key={i}>
                     <label className="h-[180px]" htmlFor={i}>
-                      <img className="h-full" src={img} alt="" />
+                      <img
+                        className="h-full"
+                        src={`http://localhost:5000/${img}`}
+                        alt=""
+                      />
                     </label>
                     <input
                       onChange={(e) => changeImage(img, e.target.files)}
@@ -290,7 +296,7 @@ const EditProduct = () => {
                 {loader ? (
                   <PropagateLoader color="#fff" cssOverride={overrideStyle} />
                 ) : (
-                  "Update product"
+                  "ذخیره"
                 )}
               </button>
             </div>

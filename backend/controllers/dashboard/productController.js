@@ -143,7 +143,7 @@ class productController {
           .limit(perPage)
           .sort({ createdAt: -1 });
         const totalproduct = await productModel.find({}).countDocuments();
-        console.log("totalproduct in controller", totalproduct);
+        // console.log("totalproduct in controller", totalproduct);
 
         responseReturn(res, 200, { totalproduct, products });
       } else {
@@ -156,7 +156,41 @@ class productController {
     }
   };
   get_product = async (req, res) => {
-    console.log(req);
+    const { productId } = req.params;
+    try {
+      const product = await productModel.findById(productId);
+      responseReturn(res, 200, { product });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  product_update = async (req, res) => {
+    let { name, description, discount, price, brand, stock, productId } =
+      req.body;
+    name = name.trim();
+    const slug = name.split(" ").join("-");
+    try {
+      const productbefor = await productModel.findByIdAndUpdate(productId, {
+        name,
+        description,
+        discount,
+        price,
+        brand,
+        stock,
+        productId,
+        slug
+      });
+      console.log("productbefor", productbefor);
+      const product = await productModel.findById(productId);
+      responseReturn(res, 200, {
+        product,
+        message: "به روز رسانی با موفقیت انجام شد"
+      });
+    } catch (error) {
+      responseReturn(res, 500, {
+        error: error.message
+      });
+    }
   };
 }
 

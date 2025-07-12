@@ -161,7 +161,7 @@ const AddProduct = () => {
           <form onSubmit={add} encType="multipart/form-data">
             <div className="flex flex-col mb-3 md:flex-row gap-4 w-full text-[#d0d2d6]">
               <div className="flex flex-col w-full gap-1">
-                <label htmlFor="name">Product name</label>
+                <label htmlFor="name">نام محصول</label>
                 <input
                   className="px-4 py-2 focus:border-indigo-500 outline-none bg-blue-mode border border-slate-700 rounded-md text-[#d0d2d6]"
                   onChange={inputHandle}
@@ -173,7 +173,7 @@ const AddProduct = () => {
                 />
               </div>
               <div className="flex flex-col w-full gap-1">
-                <label htmlFor="brand">Product brand</label>
+                <label htmlFor="brand">برند محصول</label>
                 <input
                   className="px-4 py-2 focus:border-indigo-500 outline-none bg-blue-mode border border-slate-700 rounded-md text-[#d0d2d6]"
                   onChange={inputHandle}
@@ -186,8 +186,8 @@ const AddProduct = () => {
               </div>
             </div>
             <div className="flex flex-col mb-3 md:flex-row gap-4 w-full text-[#d0d2d6]">
-              <div className="flex flex-col w-full gap-1 relative">
-                <label htmlFor="category">Category</label>
+              <div className="flex flex-col w-full gap-1 relative z-10">
+                <label htmlFor="category">دسته بندی</label>
                 <input
                   readOnly
                   onClick={() => setCateShow(!cateShow)}
@@ -195,11 +195,11 @@ const AddProduct = () => {
                   onChange={inputHandle}
                   value={category}
                   type="text"
-                  placeholder="--select category--"
+                  placeholder="--دسته بندی--"
                   id="category"
                 />
                 <div
-                  className={`absolute top-[101%] bg-slate-800 w-full transition-all ${
+                  className={`absolute top-[101%] bg-blue-mode w-full transition-all ${
                     cateShow ? "scale-100" : "scale-0"
                   }`}
                 >
@@ -213,7 +213,7 @@ const AddProduct = () => {
                     />
                   </div>
                   <div className="pt-14"></div>
-                  <div className="flex justify-start items-start flex-col h-[200px] overflow-x-scroll">
+                  <div className="flex justify-start items-start flex-col h-[200px] overflow-x-scroll ">
                     {allCategory.map((c, i) => (
                       <span
                         className={`px-4 py-2 hover:bg-indigo-500 hover:text-white hover:shadow-lg w-full cursor-pointer ${
@@ -233,7 +233,7 @@ const AddProduct = () => {
                 </div>
               </div>
               <div className="flex flex-col w-full gap-1">
-                <label htmlFor="stock">Stock</label>
+                <label htmlFor="stock">تعداد</label>
                 <input
                   className="px-4 py-2 focus:border-indigo-500 outline-none bg-blue-mode border border-slate-700 rounded-md text-[#d0d2d6]"
                   onChange={inputHandle}
@@ -249,7 +249,7 @@ const AddProduct = () => {
 
             <div className="flex flex-col mb-3 md:flex-row gap-4 w-full text-[#d0d2d6]">
               <div className="flex flex-col w-full gap-1">
-                <label htmlFor="price">Price</label>
+                <label htmlFor="price">قیمت</label>
                 <input
                   className="px-4 py-2 focus:border-indigo-500 outline-none bg-blue-mode border border-slate-700 rounded-md text-[#d0d2d6]"
                   onChange={inputHandle}
@@ -261,21 +261,21 @@ const AddProduct = () => {
                 />
               </div>
               <div className="flex flex-col w-full gap-1">
-                <label htmlFor="discount">Discount</label>
+                <label htmlFor="discount">تخفیف</label>
                 <input
                   min="0"
                   className="px-4 py-2 focus:border-indigo-500 outline-none bg-blue-mode border border-slate-700 rounded-md text-[#d0d2d6]"
                   onChange={inputHandle}
                   value={state.discount}
                   type="number"
-                  placeholder="%discount%"
+                  placeholder="تخفیف"
                   name="discount"
                   id="discount"
                 />
               </div>
             </div>
             <div className="flex flex-col w-full gap-1 text-[#d0d2d6] mb-5">
-              <label htmlFor="description">Description</label>
+              <label htmlFor="description">توضیحات تکمیلی</label>
               <JoditEditor
                 ref={editor}
                 value={content}
@@ -303,7 +303,7 @@ const AddProduct = () => {
                   />
                   <span
                     onClick={() => removeImage(i)}
-                    className="p-2 z-10 cursor-pointer bg-slate-700 hover:shadow-lg hover:shadow-slate-400/50 text-white absolute top-1 right-1 rounded-full"
+                    className="p-2 z-10 cursor-pointer bg-blue-mode hover:shadow-lg hover:shadow-slate-400/50 text-white absolute top-1 right-1 rounded-full"
                   >
                     <IoCloseSharp />
                   </span>
@@ -316,7 +316,7 @@ const AddProduct = () => {
                 <span>
                   <BsImages />
                 </span>
-                <span>select image</span>
+                <span>انتخاب عکس</span>
               </label>
               <input
                 multiple

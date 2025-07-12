@@ -5,9 +5,14 @@ const productController = require("../../controllers/dashboard/productController
 router.post("/product-add", authMiddleware, productController.add_product);
 router.get("/get-products", authMiddleware, productController.get_products);
 router.get(
-  "/get-product/:productId",
+  "/product-get/:productId",
   authMiddleware,
   productController.get_product
+);
+router.post(
+  "/product-update",
+  authMiddleware,
+  productController.product_update
 );
 
 module.exports = router;
