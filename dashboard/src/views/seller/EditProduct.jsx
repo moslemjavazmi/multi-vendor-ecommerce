@@ -1,12 +1,15 @@
+//dashboard/src/views/seller/EditProduct.jsx
 import React, { useEffect, useState, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { PropagateLoader } from "react-spinners";
 import toast from "react-hot-toast";
 import { getCategory } from "../../store/Reducers/categoryReducer";
+import api from "../../api/api";
 import {
   get_product,
   update_product,
+  product_image_update,
   messageClear
 } from "../../store/Reducers/productReducer";
 import JoditEditor from "jodit-react";
@@ -53,6 +56,7 @@ const EditProduct = () => {
 
   const [cateShow, setCateShow] = useState(false);
   const [category, setCategory] = useState("");
+  const [newImages, setNewImages] = useState([]);
   const [allCategory, setAllCategory] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const categorySearch = (e) => {
@@ -69,15 +73,28 @@ const EditProduct = () => {
   };
   const [imageShow, setImageShow] = useState([]);
 
+  // const changeImage = (img, files) => {
+  //   if (files.length > 0) {
+  //     dispatch(
+  //       product_image_update({
+  //         oldImage: img,
+  //         newImage: files[0],
+  //         productId: ProductId
+  //       })
+  //     );
+  //   }
+  // };
   const changeImage = (img, files) => {
     if (files.length > 0) {
-      // dispatch(
-      //   product_image_update({
-      //     oldImage: img,
-      //     newImage: files[0],
-      //     ProductId
-      //   })
-      // );
+      dispatch(
+        product_image_update({
+          oldImage: img,
+          newImage: files[0],
+          productId: ProductId
+        })
+      ).then(() => {
+        dispatch(get_product(ProductId));
+      });
     }
   };
 
@@ -110,7 +127,67 @@ const EditProduct = () => {
       dispatch(messageClear());
     }
   }, [successMessage, errorMessage]);
+  // تابع برای افزودن تصاویر جدید
+  const addNewImages = (e) => {
+    if (e.target.files.length > 0) {
+      const files = Array.from(e.target.files);
+      setNewImages((prev) => [...prev, ...files]);
+    }
+  };
 
+  // تابع برای حذف تصاویر جدید قبل از آپلود
+  const removeNewImage = (index) => {
+    setNewImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // تابع برای آپلود تصاویر جدید
+  const uploadNewImages = async () => {
+    if (newImages.length === 0) return;
+
+    try {
+      const formData = new FormData();
+
+      // استفاده از نام صحیح فیلد
+      newImages.forEach((img) => formData.append("newImages[]", img));
+
+      formData.append("productId", ProductId);
+
+      const { data } = await api.post("/product-add-images", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: true // اطمینان از ارسال کوکی‌ها
+      });
+
+      if (data.success) {
+        toast.success("تصاویر جدید با موفقیت اضافه شدند");
+        setNewImages([]);
+        dispatch(get_product(ProductId));
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+
+      // نمایش پیام خطای مناسب
+      if (error.response?.data?.error) {
+        toast.error(error.response.data.error);
+      } else {
+        toast.error("خطا در آپلود تصاویر");
+      }
+    }
+  };
+  // در EditProduct.jsx
+  const deleteImage = async (img) => {
+    if (window.confirm("آیا مطمئنید می‌خواهید این تصویر را حذف کنید؟")) {
+      try {
+        await api.post("/product-delete-image", {
+          productId: ProductId,
+          image: img
+        });
+        toast.success("تصویر با موفقیت حذف شد");
+        dispatch(get_product(ProductId)); // دریافت مجدد محصول
+      } catch (error) {
+        toast.error("خطا در حذف تصویر");
+      }
+    }
+  };
   const update = (e) => {
     e.preventDefault();
     const obj = {
@@ -125,7 +202,6 @@ const EditProduct = () => {
     console.log(obj);
     dispatch(update_product(obj));
   };
-  console.log("imageShow", imageShow);
   return (
     <div className="px-2 lg:px-7 pt-5 ">
       <div className="w-full p-4  bg-blue-mode rounded-md">
@@ -274,7 +350,7 @@ const EditProduct = () => {
                   <div key={i}>
                     <label className="h-[180px]" htmlFor={i}>
                       <img
-                        className="h-full"
+                        className="h-[150px] w-full object-fill"
                         src={`http://localhost:5000/${img}`}
                         alt=""
                       />
@@ -285,10 +361,64 @@ const EditProduct = () => {
                       id={i}
                       className="hidden"
                     />
+                    <button
+                      onClick={() => deleteImage(img)}
+                      className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full"
+                    >
+                      <IoCloseSharp />
+                    </button>
                   </div>
                 ))}
+              {/* پیش‌نمایش تصاویر جدید */}
+              {newImages.map((img, i) => (
+                <div key={`new-${i}`} className="relative">
+                  <img
+                    src={URL.createObjectURL(img)}
+                    alt="preview"
+                    className="h-[150px] w-full object-fill"
+                  />
+                  <button
+                    onClick={() => removeNewImage(i)}
+                    className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full"
+                  >
+                    <IoCloseSharp />
+                  </button>
+                </div>
+              ))}
+              {/* افزودن تصاویر جدید */}
+              <div>
+                <label
+                  className="flex justify-center items-center flex-col h-[150px] cursor-pointer border border-dashed hover:border-indigo-500 w-full text-[#d0d2d6]"
+                  htmlFor="new_images"
+                >
+                  <span>
+                    <BsImages />
+                  </span>
+                  <span>انتخاب عکس</span>
+                </label>
+                <input
+                  onChange={addNewImages}
+                  type="file"
+                  id="new_images"
+                  className="hidden"
+                  multiple
+                />
+              </div>
             </div>
-            <div className="flex">
+
+            <div className="flex justify-around">
+              {/* دکمه آپلود تصاویر جدید */}
+              {newImages.length > 0 && (
+                <div className="mr-3">
+                  <button
+                    type="button"
+                    onClick={uploadNewImages}
+                    className="bg-green-500 w-[190px] hover:shadow-blue-500/20 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3"
+                  >
+                    آپلود {newImages.length} تصویر جدید
+                  </button>
+                </div>
+              )}
               <button
                 disabled={loader ? true : false}
                 className="bg-blue-500 w-[190px] hover:shadow-blue-500/20 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3"

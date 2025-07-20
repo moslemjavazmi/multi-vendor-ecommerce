@@ -88,6 +88,38 @@ export const update_product = createAsyncThunk(
     }
   }
 );
+export const product_image_update = createAsyncThunk(
+  "product/product_update_image",
+  async (
+    { oldImage, newImage, productId },
+    { rejectWithValue, fulfillWithValue }
+  ) => {
+    try {
+      const formData = new FormData();
+      formData.append("oldImage", oldImage);
+      formData.append("newImage", newImage);
+      formData.append("productId", productId);
+      const { data } = await api.post(`/product-update-image`, formData, {
+        withCredentials: true
+      });
+      console.log("data in update reducer ", data);
+      return fulfillWithValue(data);
+    } catch (error) {}
+  }
+);
+export const product_add_images = createAsyncThunk(
+  "product/product_add_images",
+  async (formData, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post("/product-add-images", formData, {
+        withCredentials: true
+      });
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 export const productReducer = createSlice({
   name: "product",
   initialState: {
@@ -142,6 +174,21 @@ export const productReducer = createSlice({
       .addCase(update_product.fulfilled, (state, action) => {
         state.loader = false;
         state.product = action.payload.product;
+      })
+      .addCase(product_image_update.fulfilled, (state, action) => {
+        state.loader = false;
+        // state.message = action.payload.message;
+      })
+      .addCase(product_add_images.pending, (state) => {
+        state.loader = true;
+      })
+      .addCase(product_add_images.fulfilled, (state, action) => {
+        state.loader = false;
+        state.successMessage = action.payload.message;
+      })
+      .addCase(product_add_images.rejected, (state, action) => {
+        state.loader = false;
+        state.errorMessage = action.payload?.error || "خطا در افزودن تصاویر";
       });
   }
 });

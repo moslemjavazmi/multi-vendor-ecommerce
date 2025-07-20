@@ -58,6 +58,36 @@ export const get_user_info = createAsyncThunk(
         withCredentials: true
       });
 
+      console.log("data in get user data", data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const profile_image_upload = createAsyncThunk(
+  "auth/profile_image_upload",
+  async ({ formData, config }, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post(
+        `/profile-image-upload`,
+        formData,
+        config
+      );
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+export const profile_info_add = createAsyncThunk(
+  "auth/profile_info_add",
+  async (info, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post("/profile-info-add", info, {
+        withCredentials: true
+      });
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -81,6 +111,7 @@ const returnRole = (token) => {
     return ""; // اگر خطایی در decode رخ داد
   }
 };
+
 const getUserFromToken = (token) => {
   if (!token) return { role: "", userInfo: null };
 
@@ -194,9 +225,7 @@ export const authReducer = createSlice({
         state.loader = false;
         state.userInfo = action.payload;
         state.successMessage = "ثبت نام با موفقیت انجام شد";
-      });
-
-    builder
+      })
       .addCase(get_user_info.pending, (state, _) => {
         state.loader = true;
         state.errorMessage = "";
@@ -204,11 +233,37 @@ export const authReducer = createSlice({
       })
       .addCase(get_user_info.fulfilled, (state, action) => {
         state.loader = false;
-        state.userInfo = action.payload;
+        state.userInfo = action.payload.userInfo;
       })
+
       .addCase(get_user_info.rejected, (state, action) => {
         state.loader = false;
-        state.userInfo = action.payload;
+        state.userInfo = "اصلاعات کاربر یافت نشد";
+      });
+    builder
+      .addCase(profile_image_upload.pending, (state) => {
+        state.loader = true;
+      })
+      .addCase(profile_image_upload.fulfilled, (state, action) => {
+        state.loader = false;
+        state.userInfo = action.payload.userInfo;
+        state.successMessage = action.payload.message;
+      })
+      .addCase(profile_image_upload.rejected, (state, action) => {
+        state.loader = false;
+        state.errorMessage = action.payload?.error || "خطا در آپلود تصویر";
+      })
+      .addCase(profile_info_add.fulfilled, (state, action) => {
+        state.loader = false;
+        state.userInfo = action.payload.userInfo;
+        state.successMessage = action.payload.message;
+      })
+      .addCase(profile_info_add.pending, (state) => {
+        state.loader = true;
+      })
+      .addCase(profile_info_add.rejected, (state, action) => {
+        state.loader = false;
+        state.errorMessage = action.payload?.error || "خطا در دریافت اطلاعات";
       });
   }
 });

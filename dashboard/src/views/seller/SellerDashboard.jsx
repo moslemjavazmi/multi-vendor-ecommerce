@@ -132,7 +132,7 @@ const SellerDashboard = () => {
             <span className="text-md font-medium">تعداد محصولات</span>
           </div>
           <div className="w-[46px] h-[47px] rounded-full bg-[#7367f01f] flex justify-center items-center text-xl">
-            < RiProductHuntLine className="text-[#7367f0] shadow-lg" />
+            <RiProductHuntLine className="text-[#7367f0] shadow-lg" />
           </div>
         </div>
         <div className="flex flex-col justify-between items-center p-5 bg-blue-mode rounded-md gap-3">

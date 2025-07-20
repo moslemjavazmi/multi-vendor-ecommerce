@@ -19,6 +19,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use("/api", require("./routes/authRoutes"));
 app.use("/api", require("./routes/dashboard/categoryRoutes"));
+app.use("/api", require("./routes/dashboard/sellerRoutes"));
 app.use("/api", require("./routes/dashboard/productRoutes"));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.get("/", (req, res) => res.send("Hello World!"));

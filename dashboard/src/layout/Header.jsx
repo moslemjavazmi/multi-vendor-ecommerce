@@ -6,7 +6,6 @@ import adminImage from "../assets/admin.jpg";
 
 const Header = ({ showSidebar, setShowSidebar }) => {
   const { userInfo } = useSelector((state) => state.auth);
-
   return (
     <div className="fixed top-0 left-0 w-full py-5 px-2 lg:px-7 z-40">
       <div className="ml-0 lg:ml-[260px] rounded-md h-[65px] flex justify-between items-center bg-dashboard-mode text-[#d0d2d6] px-5 transition-all">
@@ -38,13 +37,21 @@ const Header = ({ showSidebar, setShowSidebar }) => {
               {userInfo.role === "seller" ? (
                 <img
                   className="w-[45px] h-[45px] rounded-full overflow-hidden"
-                  src={userInfo.image ? userInfo.image : adminImage}
+                  src={
+                    userInfo.image
+                      ? `http://localhost:5000/${userInfo.image}`
+                      : adminImage
+                  }
                   alt=""
                 />
               ) : (
                 <img
                   className="w-[45px] h-[45px] rounded-full overflow-hidden"
-                  src={userInfo.image ? userInfo.image : sellerImage}
+                  src={
+                    userInfo.image
+                      ? `http://localhost:5000/${userInfo.image}`
+                      : sellerImage
+                  }
                   alt=""
                 />
               )}

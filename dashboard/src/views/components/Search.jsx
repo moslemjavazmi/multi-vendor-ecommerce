@@ -1,6 +1,8 @@
 import React from "react";
 
 const Search = ({ setPerPage, setSearchValue, searchValue }) => {
+  console.log("setPerPage", setPerPage);
+
   return (
     <div className="flex justify-between items-center">
       <select
